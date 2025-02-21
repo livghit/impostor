@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/livghit/impostor/server"
 )
 
 var upgrader = websocket.Upgrader{
@@ -41,26 +42,6 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/ws", handleWebSocket)
-
-	// Serve Vue frontend
-	fs := http.FileServer(http.Dir("./ui/dist"))
-	http.Handle("/", fs)
-
-	// Route responsible for creating a player
-	http.HandleFunc("POST /create-player", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("We create a player now"))
-	})
-	// Route responsible for creating a lobby
-	http.HandleFunc("POST /create-lobby", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("We create a lobby now"))
-	})
-	// Route responsible for creating a game
-	http.HandleFunc("POST /create-game", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("We create a game now"))
-	})
-
-	// Server
-	port := "8080"
-	log.Println("Server started on port", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	server := server.New(&server.ServerConfigs{})
+	http.ListenAndServe(":8080", server.Router)
 }
