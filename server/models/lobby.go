@@ -1,3 +1,8 @@
 package models
 
-type Lobby struct{}
+import "gorm.io/gorm"
+
+type Lobby struct{
+  gorm.Model
+  Name string
+}

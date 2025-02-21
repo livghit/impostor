@@ -1,3 +1,8 @@
 package models
 
-type Player struct{}
+import "gorm.io/gorm"
+
+type Player struct{
+  gorm.Model
+  Name string
+}
