@@ -1,25 +1,19 @@
 package main
 
 import (
-	"log"
-	"os"
-	"path/filepath"
-
 	"github.com/livghit/impostor/server/database"
 	"github.com/livghit/impostor/server/models"
+	"github.com/livghit/impostor/utils"
 )
 
+func main() {
+	databasePath := utils.DatabasePath()
+	db := database.New(databasePath)
 
-func main(){
-  homeDir, err := os.UserHomeDir();if err != nil{
-    log.Fatal(err)
-  }
-  db := database.New(filepath.Join(homeDir,"Development","OpenSource","impostor","test.db"))
-
-  models := []interface{}{
-    models.Player{},
-    models.Game{},
-    models.Lobby{},
-  }
-  db.Conn.AutoMigrate(models...)
+	models := []interface{}{
+		models.Player{},
+		models.Game{},
+		models.Lobby{},
+	}
+	db.Conn.AutoMigrate(models...)
 }

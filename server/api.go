@@ -4,20 +4,13 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
-func loadAllRoutes() *chi.Mux {
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
+func (s *Server) LoadRoutes() *chi.Mux {
+	s.Router.Mount("/", loadWebRoutes())
+	s.Router.Mount("/api", loadApiRoutes())
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Well well"))
-	})
-
-	r.Mount("/api", loadApiRoutes())
-
-  return r
+	return s.Router
 }
 
 func loadApiRoutes() *chi.Mux {
@@ -35,4 +28,13 @@ func loadApiRoutes() *chi.Mux {
 	})
 
 	return api
+}
+
+func loadWebRoutes() *chi.Mux {
+	web := chi.NewRouter()
+	web.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Well well"))
+	})
+
+	return web
 }

@@ -42,6 +42,11 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/ws", handleWebSocket)
-	server := server.New(&server.ServerConfigs{})
-	http.ListenAndServe(":8080", server.Router)
+	server := server.New(&server.ServerConfigs{
+		Port: ":8080",
+	})
+	server.LoadMiddleware()
+	server.LoadRoutes()
+
+	server.Start()
 }
